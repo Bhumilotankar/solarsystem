@@ -1,0 +1,186 @@
+/*c program to draw solar system using computer graphics*/
+#include<stdio.h>
+#include<conio.h>
+#include<graphics.h>
+#include<stdlib.h>
+#include<math.h>
+#include<dos.h>
+
+/*function to manipulate the position of planets on the orbit*/
+void planetmotion(int xrad,int yrad,int midx,int midy,int x[70],int y[70])
+{
+int i,j=0;
+/*positions of planets in their corresponding orbits*/
+for(i=360;i>0;i=i-6)
+{
+ x[j]=midx-(xrad*cos((i*3.14)/180));
+ y[j++]=midy-(yrad* sin((i*3.14)/180));
+}
+return;
+}
+/*driver code*/
+ int main()
+ {
+   /*initializing graphic driver*/
+   int gdriver=DETECT,gmode,err;
+   int i=0,midx,midy;
+   int xrad[9],yrad[9],x[9][70],y[9][70];
+   int pos[9],planet[9],tmp;
+   /*initiliazing graphics mode by passing the three arguements to initgraph*/
+
+
+   initgraph(&gdriver,&gmode,"C:\\TC\\BGI");
+   err=graphresult();
+
+   if(err!=grOk)
+   {
+   //error occured
+    printf("Graphics Error:%s",grapherrormsg(err));
+    return 0;
+   }
+
+   //mid positions at x and y axis
+   midx=getmaxx()-310;
+   midy=getmaxy()-190;
+
+   //manipulation radius of all the nine planets
+   planet[0]=8;
+   for(i=1;i<9;i++)
+   {
+    planet[i]=planet[i-1]+1;
+   }
+   /*offset position for the planets on their corresponding orbit*/
+   for(i=0;i<9;i++)
+   {
+    pos[i]=i*6;
+   }
+
+/*orbits for all 9 planets*/
+   xrad[0]=70,yrad[0]=40;
+   for(i=1;i<9;i++)
+   {
+    xrad[i]=xrad[i-1]+20;
+    yrad[i]=yrad[i-1]+12;
+   }
+
+/*positions of planets on their corresponding orbits*/
+  for(i=0;i<9;i++)
+  {
+   planetmotion(xrad[i],yrad[i],midx,midy,x[i],y[i]);
+   }
+
+  while(!kbhit())
+  {
+   /*drawing 9 orbits*/
+   setcolor(WHITE);
+   for(i=0;i<9;i++)
+   {
+   ellipse(midx,midy,0,360,xrad[i],yrad[i]);
+   }
+
+  //the title
+   outtextxy(250,30,"THE SOLAR SYSTEM");
+
+
+/*sun at the mid of the solar system*/
+setcolor(YELLOW);
+outtextxy(315,260,"sun");
+setfillstyle(SOLID_FILL,YELLOW);
+circle(midx,midy,20);
+floodfill(midx,midy,YELLOW);
+
+/*mercury in first orbit*/
+setcolor(6);
+outtextxy(307,241,"mercury");
+setfillstyle(SOLID_FILL,6);
+pieslice(x[0][pos[0]],y[0][pos[0]],0,360,planet[0]);
+
+/*venus in second orbit*/
+setcolor(12);
+outtextxy(310,227,"venus");
+setfillstyle(SOLID_FILL,12);
+pieslice(x[1][pos[1]],y[1][pos[1]],0,360,planet[1]);
+
+/*earth in third orbit*/
+setcolor(1);
+outtextxy(310,215,"earth");
+setfillstyle(SOLID_FILL,1);
+pieslice(x[2][pos[2]],y[2][pos[2]],0,360,planet[2]);
+
+/*mars in fourth orbit*/
+setcolor(4);
+outtextxy(310,203,"mars");
+setfillstyle(SOLID_FILL,4);
+pieslice(x[3][pos[3]],y[3][pos[3]],0,360,planet[3]);
+
+/*jupiter in fifth orbit*/
+setcolor(BROWN);
+outtextxy(307,192,"jupiter");
+setfillstyle(SOLID_FILL,BROWN);
+pieslice(x[4][pos[4]],y[4][pos[4]],0,360,planet[4]);
+
+/*saturn in sixth orbit*/
+setcolor(8);
+outtextxy(309,181,"saturn");
+setfillstyle(SOLID_FILL,8);
+pieslice(x[5][pos[5]],y[5][pos[5]],0,360,planet[5]);
+
+/*uranus in seventh orbit*/
+setcolor(3);
+outtextxy(309,169,"uranus");
+setfillstyle(SOLID_FILL,3);
+pieslice(x[6][pos[6]],y[6][pos[6]],0,360,planet[6]);
+
+/*neptune in eighth orbit*/
+setcolor(9);
+outtextxy(307,155,"neptune");
+setfillstyle(SOLID_FILL,9);
+pieslice(x[7][pos[7]],y[7][pos[7]],0,360,planet[7]);
+
+/*pluto in ninth orbit*/
+setcolor(14);
+outtextxy(310,143,"pluto");
+setfillstyle(SOLID_FILL,14);
+pieslice(x[8][pos[8]],y[8][pos[8]],0,360,planet[8]);
+
+//for stars
+  for(i=0;i<500;i++)
+  {
+  int m= rand()%2000 +1;
+  int n=rand()%2000+1;
+  putpixel(m,n,15);
+  }
+/*checking for one complete rotattion*/
+for(i=0;i<9;i++)
+{
+ if(pos[i]<=0)
+ {
+  pos[i]=59;
+ }
+ else
+ {
+  pos[i]=pos[i]-1;
+ }
+}
+
+/*sleep for 100 milliseconds*/
+delay(200);
+cleardevice();
+}
+
+//deallocate memory allocated for graphic screen
+closegraph();
+return 0;
+
+
+}
+
+
+
+
+
+
+
+
+
+
